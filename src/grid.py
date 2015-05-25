@@ -4,7 +4,7 @@ from PIL import Image, ImageFilter
 class Grid(object):
   def __init__(self, count, images):
     self.images = images
-    self.imageSize = images[(0, 0)].size
+    self.imageSize = images[0, 0].size
     self.imageWidth = self.imageSize[0]
     self.imageHeight = self.imageSize[1]
     self.imageCount = count
@@ -16,22 +16,22 @@ class Grid(object):
     return self.images[key]
 
 
-class MainImage(object):
+class TemplateImage(object):
   def __init__(self):
     pass
-        
+
   def load(self, fileName):
     self.image = Image.open(fileName)
     self.image.convert('RGB')
-    
+
   def chop(self, subImageCount, subImageSize):
-    logger.info("Input image has size %d x %d" % self.image.size)
+    logger.info("Template image has size %d x %d" % self.image.size)
 
     size = (subImageCount[0] * subImageSize[0], subImageCount[1] * subImageSize[1])
-    logger.info("Resizing input image to %d x %d" % size)
-    self.image = self.image.resize(size, Image.ANTIALIAS)
+    logger.info("Resizing template image to %d x %d" % size)
+    image = self.image.resize(size, Image.ANTIALIAS)
 
-    logger.info("Chopping up input image into %d x %d subimages of size %d x %d",
+    logger.info("Chopping up template image into %d x %d subimages of size %d x %d",
         subImageCount[0], subImageCount[1], subImageSize[1], subImageSize[1])
 
     subImageWidth = subImageSize[0]
@@ -45,8 +45,8 @@ class MainImage(object):
         x = i * subImageWidth
         y = j * subImageHeight
         box = (x, y, x + subImageWidth, y + subImageHeight)
-        cropped = self.image.crop(box).convert('RGB')
-        images[(i,j)] = cropped
+        cropped = image.crop(box).convert('RGB')
+        images[i, j] = cropped
 
     return Grid(subImageCount, images)
 
