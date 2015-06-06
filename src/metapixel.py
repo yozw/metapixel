@@ -34,7 +34,7 @@ def main():
                      help='dimensions of the collage (default 20x20)')
   parser.add_argument('-m', metavar='size', type=size, default=(6, 6), dest='sampleSize',
                      help='size to scale input images down to for image matching (default 6x6)')
-  parser.add_argument('-s', metavar='size', type=size, default=(20, 20), dest='subImageSize',
+  parser.add_argument('-s', metavar='size', type=size, default=(50, 50), dest='subImageSize',
                      help='size of input images in the output collage (default 50x50)')
 
   args = parser.parse_args()
@@ -55,6 +55,8 @@ def main():
 
   imageLibrary = ImageLibrary()
   imageLibrary.load(args.inputSpec)
+  if imageLibrary.size() == 0:
+    raise Exception("No input images!")
   logger.info('Loaded %d images into image library.', imageLibrary.size())
 
   dist = constructDistanceMatrix(sampleGrid, imageLibrary)

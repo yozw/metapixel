@@ -53,8 +53,8 @@ def renderCollage(solution, grid, sampleGrid, imageLibrary, outputFile, cheatFac
     for j in range(grid.imageCountY):
       imageIndex = solution[i, j]
       image = imageLibrary.images[imageIndex]
-      sampleImage = image.get(sampleGrid.imageWidth, sampleGrid.imageHeight)
-      optimalParameters[i, j] = postOptimize(sampleImage, sampleGrid[i, j])
+      sampleImage = image.get(sampleGrid.imageWidth, sampleGrid.imageHeight).get()
+      optimalParameters[i, j] = postOptimize(sampleImage, sampleGrid[i, j].get())
 
   logger.info("Rendering collage ...")
   background = Image.new("RGB", grid.size, "white")
@@ -65,9 +65,9 @@ def renderCollage(solution, grid, sampleGrid, imageLibrary, outputFile, cheatFac
       offset = (i * grid.imageWidth, j * grid.imageHeight)
       imageIndex = solution[i, j]
       image = imageLibrary.images[imageIndex]
-      subImage = image.get(grid.imageWidth, grid.imageHeight)
+      subImage = image.get(grid.imageWidth, grid.imageHeight).get()
       image = adjustImage(subImage, optimalParameters[i, j])
-      background.paste(grid[i, j], offset)
+      background.paste(grid[i, j].get(), offset)
       collage.paste(image, offset)
 
   logger.info("Saving ...")

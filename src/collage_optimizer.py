@@ -51,9 +51,13 @@ def optimizeCollage(dist, grid, imageLibrary, minimumDistance):
           bump2 = dist[cell1[0], cell1[1], image1] + dist[cell1[0], cell1[1], nextImage2]
           if bump1 < bump2:
             cIdx[cell1] += 1
+            if cIdx[cell1] >= len(candidates[cell1]):
+              raise Exception("Optimization failed: ran out of candidates. Try adding more images, or decreasing minimumDistance.")
             newChangedCells.add(cell1)
           else:
             cIdx[cell2] += 1
+            if cIdx[cell2] >= len(candidates[cell2]):
+              raise Exception("Optimization failed: ran out of candidates. Try adding more images, or decreasing minimumDistance.")
             newChangedCells.add(cell2)
     changedCells = list(newChangedCells)
 
